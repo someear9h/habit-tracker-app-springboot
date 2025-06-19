@@ -1,11 +1,11 @@
 package com.pm.habitservice.controller;
 
+import com.pm.habitservice.dto.HabitRequestDTO;
 import com.pm.habitservice.dto.HabitResponseDTO;
 import com.pm.habitservice.service.HabitService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +22,13 @@ public class HabitController {
     public ResponseEntity<List<HabitResponseDTO>> getHabits() {
         List<HabitResponseDTO> habits = habitService.getHabits();
         return ResponseEntity.ok().body(habits);
+    }
+
+    @PostMapping
+    public ResponseEntity<HabitResponseDTO> createHabit(
+            @Valid @RequestBody HabitRequestDTO habitRequestDTO) {
+
+        HabitResponseDTO habitResponseDTO = habitService.createHabit(habitRequestDTO);
+        return ResponseEntity.ok().body(habitResponseDTO);
     }
 }

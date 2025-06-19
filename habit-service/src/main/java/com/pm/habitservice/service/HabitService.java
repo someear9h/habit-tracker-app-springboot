@@ -1,5 +1,6 @@
 package com.pm.habitservice.service;
 
+import com.pm.habitservice.dto.HabitRequestDTO;
 import com.pm.habitservice.dto.HabitResponseDTO;
 import com.pm.habitservice.mapper.HabitMapper;
 import com.pm.habitservice.model.Habit;
@@ -24,5 +25,12 @@ public class HabitService {
                 .map(HabitMapper::toDTO).toList();
 
         return habitResponseDTOs;
+    }
+
+    public HabitResponseDTO createHabit(HabitRequestDTO habitRequestDTO) {
+        Habit newHabit = habitRepository.save(
+                HabitMapper.toModel(habitRequestDTO));
+
+        return HabitMapper.toDTO(newHabit);
     }
 }

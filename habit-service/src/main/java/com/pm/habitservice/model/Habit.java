@@ -63,7 +63,7 @@ public class Habit {
         return habitDate;
     }
 
-    public void setDate(LocalDate habitDate) {
+    public void setHabitDate(LocalDate habitDate) {
         this.habitDate = habitDate;
     }
 }

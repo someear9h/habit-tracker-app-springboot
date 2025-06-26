@@ -1,5 +1,6 @@
 package com.pm.habitservice.dto;
 
+//outgoing data → when server returns data to client
 public class HabitResponseDTO {
     private String id;
     private String name;

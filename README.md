@@ -1,7 +1,5 @@
-Sure Samarth! Here's the **full README.md content** in copyable `.md` format. Just paste this into your `README.md` file:
 
-````markdown
-# 🧠 Habit Tracker App
+# Habit Tracker App
 
 A full-stack habit tracker application built using **Spring Boot** (Java backend) and **React.js** (frontend). The app allows users to track daily habits with fields like name, description, email, and habit date.
 
@@ -156,11 +154,4 @@ Currently, all habits are public. A future enhancement will allow users to:
 
 **Samarth Tikotkar**
 [GitHub](https://github.com/someear9h) • [LinkedIn](https://www.linkedin.com/in/samarth-tikotkar-7532b0328/)
-📧 [tikotkarsamarth@gmail.com](mailto:tikotkarsamarth@gmail.com)
-
-```
-
----
-
-✅ You can now paste this into `habit-backend/README.md` or `habit-tracker/README.md`. Let me know if you want the Dockerfile, `.dockerignore`, or `docker-compose.yml` to go with this too.
-```
+📧 [samarthsetz@gmail.com](mailto:tikotkarsamarth@gmail.com)

@@ -3,6 +3,7 @@ package com.pm.habitservice.service;
 import com.pm.habitservice.dto.HabitRequestDTO;
 import com.pm.habitservice.dto.HabitResponseDTO;
 import com.pm.habitservice.exception.HabitNotFoundException;
+import com.pm.habitservice.grpc.StreakServiceGrpcClient;
 import com.pm.habitservice.mapper.HabitMapper;
 import com.pm.habitservice.model.Habit;
 import com.pm.habitservice.repository.HabitRepository;
@@ -15,10 +16,12 @@ import java.util.UUID;
 @Service
 public class HabitService {
 
-    private HabitRepository habitRepository;
+    private final HabitRepository habitRepository;
+    private final StreakServiceGrpcClient streakServiceGrpcClient;
 
-    public HabitService(HabitRepository habitRepository) {
+    public HabitService(HabitRepository habitRepository, StreakServiceGrpcClient streakServiceGrpcClient) {
         this.habitRepository = habitRepository;
+        this.streakServiceGrpcClient = streakServiceGrpcClient;
     }
 
     public List<HabitResponseDTO> getHabits() {
@@ -41,14 +44,29 @@ public class HabitService {
         Habit habit = habitRepository.findById(id).orElseThrow(
                 () -> new HabitNotFoundException("Habit not found with id: " + id));
 
+        // Update habit fields
         habit.setName(habitRequestDTO.getName());
         habit.setDescription(habitRequestDTO.getDescription());
         habit.setEmail(habitRequestDTO.getEmail());
         habit.setHabitDate(LocalDate.parse(habitRequestDTO.getHabitDate()));
 
         Habit updatedHabit = habitRepository.save(habit);
+
+        // Call gRPC to update streak
+        try {
+            streakServiceGrpcClient.updateStreak(
+                    updatedHabit.getId().toString(),
+                    updatedHabit.getName(),
+                    updatedHabit.getHabitDate().toString()
+            );
+        } catch (Exception e) {
+            // Optional: Log or handle gRPC failure gracefully
+            System.err.println("Failed to update streak via gRPC: " + e.getMessage());
+        }
+
         return HabitMapper.toDTO(updatedHabit);
     }
+
 
     public void deleteHabit(UUID id) {
         Habit habit = habitRepository.findById(id).orElseThrow(

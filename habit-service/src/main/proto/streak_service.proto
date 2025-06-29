@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "streak";
+
+service StreakService {
+  rpc UpdateStreak (StreakRequest) returns (StreakResponse);
+}
+
+message StreakRequest {
+  string habitId = 1;
+  string habitName = 2;
+  string habitDate = 3;
+}
+
+message StreakResponse {
+  string habitId = 1;
+  int32 currentStreak = 2;
+  int32 maxStreak = 3;
+  string message = 4;
+}

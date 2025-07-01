@@ -4,6 +4,7 @@ import com.pm.habitservice.dto.HabitRequestDTO;
 import com.pm.habitservice.dto.HabitResponseDTO;
 import com.pm.habitservice.exception.HabitNotFoundException;
 import com.pm.habitservice.grpc.StreakServiceGrpcClient;
+import com.pm.habitservice.kafka.KafkaProducer;
 import com.pm.habitservice.mapper.HabitMapper;
 import com.pm.habitservice.model.Habit;
 import com.pm.habitservice.repository.HabitRepository;
@@ -18,10 +19,12 @@ public class HabitService {
 
     private final HabitRepository habitRepository;
     private final StreakServiceGrpcClient streakServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
-    public HabitService(HabitRepository habitRepository, StreakServiceGrpcClient streakServiceGrpcClient) {
+    public HabitService(HabitRepository habitRepository, StreakServiceGrpcClient streakServiceGrpcClient, KafkaProducer kafkaProducer) {
         this.habitRepository = habitRepository;
         this.streakServiceGrpcClient = streakServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<HabitResponseDTO> getHabits() {
@@ -36,6 +39,9 @@ public class HabitService {
     public HabitResponseDTO createHabit(HabitRequestDTO habitRequestDTO) {
         Habit newHabit = habitRepository.save(
                 HabitMapper.toModel(habitRequestDTO));
+
+        // kafka event
+        kafkaProducer.sendEvent(newHabit);
 
         return HabitMapper.toDTO(newHabit);
     }
